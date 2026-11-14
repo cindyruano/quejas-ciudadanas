@@ -7,5 +7,6 @@ const router = Router();
 
 router.post('/', uploadCaptura, asyncHandler(controlador.guardarCaptura));
 router.get('/', asyncHandler(controlador.listarCapturas));
+router.get('/:id', asyncHandler(controlador.obtenerCaptura));
 
 module.exports = router;

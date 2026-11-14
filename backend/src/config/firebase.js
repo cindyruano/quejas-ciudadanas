@@ -35,5 +35,6 @@ module.exports = {
   admin,
   db,
   quejasRef: db.collection(config.firebase.coleccionQuejas),
-  imagenesRef: db.collection(config.firebase.coleccionImagenes)
+  imagenesRef: db.collection(config.firebase.coleccionImagenes),
+  capturasRef: db.collection(config.firebase.coleccionCapturas)
 };

@@ -85,11 +85,11 @@
     if (!q) return;
     document.getElementById('modal-titulo').textContent = q.id;
     const enlaces = [
-      q.fotoLocalUrl ? `<a href="${escaparHtml(q.fotoLocalUrl)}" target="_blank" rel="noopener" class="text-blue-700 hover:underline">Foto original (carpeta /uploads)</a>` : '',
+      `<a href="${escaparHtml(q.fotoOriginalUrl)}" target="_blank" rel="noopener" class="text-blue-700 hover:underline">Ver foto original</a>`,
       q.capturaUrl
-        ? `<a href="${escaparHtml(q.capturaUrl)}" target="_blank" rel="noopener" class="text-blue-700 hover:underline">Captura del comprobante (carpeta /capturas)</a>`
+        ? `<a href="${escaparHtml(q.capturaUrl)}" target="_blank" rel="noopener" class="text-blue-700 hover:underline">Ver captura del comprobante</a>`
         : '<span class="text-slate-400">Sin captura de comprobante</span>'
-    ].filter(Boolean);
+    ];
 
     document.getElementById('modal-contenido').innerHTML = `
       <img src="${escaparHtml(q.imagenUrl)}" alt="Fotografía de la queja" class="w-full max-h-[50vh] object-contain bg-slate-100 rounded-lg" />

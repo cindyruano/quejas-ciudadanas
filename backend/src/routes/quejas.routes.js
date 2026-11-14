@@ -9,5 +9,6 @@ router.post('/', uploadFoto, asyncHandler(controlador.crearQueja));
 router.get('/', asyncHandler(controlador.listarQuejas));
 router.get('/:id', asyncHandler(controlador.obtenerQueja));
 router.get('/:id/imagen', asyncHandler(controlador.obtenerImagen));
+router.get('/:id/foto-original', asyncHandler(controlador.obtenerFotoOriginal));
 
 module.exports = router;

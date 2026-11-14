@@ -27,7 +27,8 @@ const config = {
     clientEmail: process.env.FIREBASE_CLIENT_EMAIL || '',
     privateKey: (process.env.FIREBASE_PRIVATE_KEY || '').replace(/\\n/g, '\n'),
     coleccionQuejas: process.env.FIRESTORE_COLLECTION_QUEJAS || 'quejas',
-    coleccionImagenes: process.env.FIRESTORE_COLLECTION_IMAGENES || 'imagenes'
+    coleccionImagenes: process.env.FIRESTORE_COLLECTION_IMAGENES || 'imagenes',
+    coleccionCapturas: process.env.FIRESTORE_COLLECTION_CAPTURAS || 'capturas'
   }
 };
 

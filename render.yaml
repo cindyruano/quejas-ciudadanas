@@ -20,5 +20,7 @@ services:
         value: quejas
       - key: FIRESTORE_COLLECTION_IMAGENES
         value: imagenes
+      - key: FIRESTORE_COLLECTION_CAPTURAS
+        value: capturas
       - key: FIREBASE_SERVICE_ACCOUNT_BASE64
         sync: false

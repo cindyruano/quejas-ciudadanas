@@ -58,8 +58,8 @@ function aDto(doc, req) {
     estado: q.estado,
     fechaRegistro: q.fechaRegistro.toDate().toISOString(),
     imagenUrl: `${base}/api/quejas/${doc.id}/imagen`,
-    fotoLocalUrl: q.foto ? `${base}/uploads/${encodeURIComponent(q.foto.archivo)}` : null,
-    capturaUrl: q.captura ? `${base}/capturas/${encodeURIComponent(q.captura.archivo)}` : null
+    fotoOriginalUrl: `${base}/api/quejas/${doc.id}/foto-original`,
+    capturaUrl: q.captura ? `${base}/api/capturas/${doc.id}` : null
   };
 }
 
@@ -240,7 +240,10 @@ async function obtenerImagen(req, res) {
   const doc = await imagenesRef.doc(id).get();
   if (!doc.exists) throw new HttpError(404, `No existe una fotografía para la queja ${id}.`);
 
-  const { base64, mimetype } = doc.data();
+  enviarImagenNube(res, doc.data());
+}
+
+function enviarImagenNube(res, { base64, mimetype }) {
   const buffer = Buffer.from(base64, 'base64');
   res.set('Content-Type', mimetype);
   res.set('Content-Length', buffer.length);
@@ -248,4 +251,26 @@ async function obtenerImagen(req, res) {
   res.send(buffer);
 }
 
-module.exports = { crearQueja, listarQuejas, obtenerQueja, obtenerImagen };
+// GET /api/quejas/:id/foto-original
+// Sirve el archivo original de /uploads; si el disco del servidor ya no lo tiene
+// (p. ej. hosting con disco temporal), responde con la copia guardada en Firebase.
+async function obtenerFotoOriginal(req, res) {
+  const { id } = req.params;
+  if (!esIdValido(id)) throw new HttpError(400, 'El ID de seguimiento no tiene un formato válido.');
+
+  const doc = await quejasRef.doc(id).get();
+  if (!doc.exists) throw new HttpError(404, `No existe una queja con el ID ${id}.`);
+
+  const { foto } = doc.data();
+  const rutaLocal = path.join(config.uploadsDir, foto.archivo);
+  try {
+    await fs.access(rutaLocal);
+    return res.type(foto.mimetype).sendFile(rutaLocal);
+  } catch {
+    const imagen = await imagenesRef.doc(id).get();
+    if (!imagen.exists) throw new HttpError(404, `No existe una fotografía para la queja ${id}.`);
+    enviarImagenNube(res, imagen.data());
+  }
+}
+
+module.exports = { crearQueja, listarQuejas, obtenerQueja, obtenerImagen, obtenerFotoOriginal, enviarImagenNube };
