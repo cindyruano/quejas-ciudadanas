@@ -70,6 +70,8 @@ Examen Desarrollo Web/
 | GET    | `/api/quejas/:id/imagen` | Fotografía servida desde Firestore                                                                                                                                                                 |
 | POST   | `/api/capturas`          | `multipart/form-data`: `quejaId`, `captura` (PNG). Guarda en `/capturas` y la asocia en Firestore                                                                                                  |
 | GET    | `/api/capturas`          | Lista los comprobantes guardados en la carpeta local                                                                                                                                               |
+| GET    | `/api/quejas/:id/foto-original` | Foto original de `/uploads`; si el disco del servidor ya no la tiene, responde con la copia de Firestore                                                                                    |
+| GET    | `/api/capturas/:id`      | Captura del comprobante desde `/capturas` o, si no existe en disco, la copia optimizada guardada en Firestore (colección `capturas`)                                                                |
 
 Errores: `400` (validación, imagen dañada, tamaño excedido), `403` (origen CORS no permitido), `404` (ruta o queja inexistente), `500` (error interno). Todas las respuestas tienen la forma `{ ok, mensaje, detalles }`.
 
