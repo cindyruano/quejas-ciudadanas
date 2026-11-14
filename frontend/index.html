@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portal de Atención Ciudadana</title>
+  <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body class="min-h-screen flex flex-col">
+  <header class="encabezado text-white">
+    <div class="max-w-4xl mx-auto px-4 py-8">
+      <p class="uppercase tracking-widest text-blue-200 text-xs font-semibold">Municipalidad</p>
+      <h1 class="text-3xl font-bold mt-1">Portal de Atención Ciudadana</h1>
+      <p class="text-blue-100 mt-2">Reporta problemas de tu comunidad. Tu queja será atendida por el personal municipal.</p>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-4xl w-full mx-auto px-4 -mt-4 pb-12">
+    <!-- Alerta general -->
+    <div id="alerta" class="hidden mb-4 rounded-lg px-4 py-3 text-sm" role="alert"></div>
+
+    <!-- ============ FORMULARIO ============ -->
+    <section id="seccion-formulario" class="bg-white rounded-2xl shadow-lg p-6 md:p-8">
+      <h2 class="text-xl font-semibold text-slate-800">Registrar queja o reporte</h2>
+      <p class="text-slate-500 text-sm mb-6">Los campos marcados con <span class="text-red-600">*</span> son obligatorios.</p>
+
+      <form id="form-queja" novalidate class="grid gap-5">
+        <div>
+          <label for="nombre" class="block text-sm font-medium text-slate-700 mb-1">Nombre (opcional)</label>
+          <input id="nombre" name="nombre" type="text" class="campo" placeholder="Déjalo vacío para enviar de forma anónima" autocomplete="name" />
+          <p class="error-campo" data-error-para="nombre"></p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-5">
+          <div>
+            <label for="categoria" class="block text-sm font-medium text-slate-700 mb-1">Categoría / asunto <span class="text-red-600">*</span></label>
+            <select id="categoria" name="categoria" class="campo" disabled>
+              <option value="">Cargando categorías…</option>
+            </select>
+            <p class="error-campo" data-error-para="categoria"></p>
+          </div>
+          <div>
+            <label for="ubicacion" class="block text-sm font-medium text-slate-700 mb-1">Ubicación / zona <span class="text-red-600">*</span></label>
+            <input id="ubicacion" name="ubicacion" type="text" class="campo" placeholder="Calle, colonia, referencia" />
+            <p class="error-campo" data-error-para="ubicacion"></p>
+          </div>
+        </div>
+
+        <div>
+          <label for="descripcion" class="block text-sm font-medium text-slate-700 mb-1">Descripción detallada del problema <span class="text-red-600">*</span></label>
+          <textarea id="descripcion" name="descripcion" rows="5" class="campo resize-y" placeholder="Describe qué ocurre, desde cuándo y cómo afecta a la comunidad"></textarea>
+          <div class="flex justify-between">
+            <p class="error-campo" data-error-para="descripcion"></p>
+            <p id="contador-descripcion" class="text-xs text-slate-400 mt-1"></p>
+          </div>
+        </div>
+
+        <div>
+          <span class="block text-sm font-medium text-slate-700 mb-1">Fotografía del problema <span class="text-red-600">*</span></span>
+          <label id="zona-foto" for="foto" class="zona-foto flex flex-col items-center justify-center text-center p-6">
+            <input id="foto" name="foto" type="file" class="hidden" />
+            <div id="foto-vacia">
+              <svg class="mx-auto h-10 w-10 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5V18a2.25 2.25 0 002.25 2.25h13.5A2.25 2.25 0 0021 18v-1.5M16.5 7.5L12 3m0 0L7.5 7.5M12 3v13.5"/></svg>
+              <p class="mt-2 text-sm text-slate-600"><span class="font-semibold text-blue-700">Haz clic para seleccionar</span> o arrastra una imagen aquí</p>
+              <p id="texto-formatos" class="text-xs text-slate-400 mt-1"></p>
+            </div>
+            <div id="foto-preview" class="hidden w-full">
+              <img id="img-preview" alt="Previsualización de la fotografía" class="mx-auto max-h-72 rounded-lg shadow" />
+              <p id="info-foto" class="text-xs text-slate-500 mt-2"></p>
+              <button type="button" id="btn-quitar-foto" class="mt-2 text-sm text-red-600 hover:underline">Quitar fotografía</button>
+            </div>
+          </label>
+          <p class="error-campo" data-error-para="foto"></p>
+        </div>
+
+        <button id="btn-enviar" type="submit" class="inline-flex items-center justify-center gap-2 bg-blue-700 hover:bg-blue-800 disabled:bg-slate-400 text-white font-semibold rounded-lg px-6 py-3 transition">
+          <span id="btn-enviar-spinner" class="spinner hidden"></span>
+          <span id="btn-enviar-texto">Enviar queja</span>
+        </button>
+      </form>
+    </section>
+
+    <!-- ============ CONFIRMACIÓN / COMPROBANTE ============ -->
+    <section id="seccion-confirmacion" class="hidden">
+      <div id="comprobante" class="rounded-2xl shadow-lg overflow-hidden">
+        <div class="encabezado text-white px-6 py-5">
+          <p class="text-xs uppercase tracking-widest text-blue-200">Comprobante de registro</p>
+          <h2 class="text-2xl font-bold">¡Queja registrada con éxito!</h2>
+        </div>
+        <div class="p-6 md:p-8 grid md:grid-cols-2 gap-6">
+          <div class="space-y-3 text-sm">
+            <div>
+              <p class="text-slate-500">ID de seguimiento</p>
+              <p id="comp-id" class="text-2xl font-mono font-bold text-blue-800"></p>
+            </div>
+            <div><p class="text-slate-500">Fecha y hora</p><p id="comp-fecha" class="font-medium"></p></div>
+            <div><p class="text-slate-500">Ciudadano</p><p id="comp-nombre" class="font-medium"></p></div>
+            <div><p class="text-slate-500">Categoría</p><p id="comp-categoria" class="font-medium"></p></div>
+            <div><p class="text-slate-500">Ubicación</p><p id="comp-ubicacion" class="font-medium"></p></div>
+            <div><p class="text-slate-500">Estado</p><p id="comp-estado" class="font-medium"></p></div>
+          </div>
+          <div class="space-y-3 text-sm">
+            <img id="comp-foto" alt="Fotografía adjunta" class="w-full max-h-64 object-cover rounded-lg" />
+            <div><p class="text-slate-500">Descripción</p><p id="comp-descripcion" class="whitespace-pre-line"></p></div>
+          </div>
+        </div>
+        <p class="px-6 pb-6 text-xs text-slate-500">Conserva tu ID de seguimiento para cualquier aclaración con la municipalidad.</p>
+      </div>
+
+      <div class="mt-4 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
+        <p id="estado-captura" class="text-sm text-slate-600"></p>
+        <button id="btn-nueva" type="button" class="bg-blue-700 hover:bg-blue-800 text-white font-semibold rounded-lg px-5 py-2.5">Registrar otra queja</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="text-center text-xs text-slate-500 py-6">
+    Sistema de Atención de Quejas Ciudadanas · <a href="admin.html" class="text-blue-700 hover:underline">Panel administrativo</a>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/index.js"></script>
+</body>
+</html>

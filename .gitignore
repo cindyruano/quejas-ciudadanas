@@ -1,0 +1,10 @@
+node_modules/
+.env
+*service-account*.json
+*firebase-adminsdk*.json
+backend/uploads/*
+!backend/uploads/.gitkeep
+backend/capturas/*
+!backend/capturas/.gitkeep
+.DS_Store
+Thumbs.db
