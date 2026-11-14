@@ -1,0 +1,103 @@
+:root {
+  --color-primario: #1d4ed8;
+  --color-primario-oscuro: #1e3a8a;
+  --color-fondo: #f1f5f9;
+}
+
+body {
+  background-color: var(--color-fondo);
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+.encabezado {
+  background: linear-gradient(135deg, var(--color-primario-oscuro), var(--color-primario));
+}
+
+.campo {
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.5rem;
+  padding: 0.625rem 0.75rem;
+  background: #fff;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.campo:focus {
+  outline: none;
+  border-color: var(--color-primario);
+  box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.2);
+}
+
+.campo.invalido {
+  border-color: #dc2626;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.15);
+}
+
+.error-campo {
+  color: #dc2626;
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+  min-height: 1rem;
+}
+
+.zona-foto {
+  border: 2px dashed #94a3b8;
+  border-radius: 0.75rem;
+  transition: border-color 0.15s, background-color 0.15s;
+  cursor: pointer;
+}
+
+.zona-foto:hover,
+.zona-foto.arrastrando {
+  border-color: var(--color-primario);
+  background-color: #eff6ff;
+}
+
+.zona-foto.invalido {
+  border-color: #dc2626;
+}
+
+.spinner {
+  width: 1.1rem;
+  height: 1.1rem;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: girar 0.8s linear infinite;
+}
+
+@keyframes girar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.tarjeta-queja {
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.tarjeta-queja:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -10px rgba(15, 23, 42, 0.25);
+}
+
+.texto-3-lineas {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.barra-categoria {
+  transition: width 0.4s ease;
+}
+
+.modal-fondo {
+  background-color: rgba(15, 23, 42, 0.65);
+}
+
+/* El comprobante usa colores planos para que html2canvas lo capture fielmente */
+#comprobante {
+  background: #ffffff;
+  color: #0f172a;
+}
