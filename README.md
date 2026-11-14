@@ -4,6 +4,18 @@ Examen final — Desarrollo y Diseño Web.
 
 Flujo: **Ciudadano → Frontend → API (Express) → Firebase Firestore + carpetas locales → API → Panel de Administración**
 
+## Sitio publicado
+
+| Componente | URL |
+|---|---|
+| Portal ciudadano | https://cindyruano.github.io/quejas-ciudadanas/ |
+| Panel de administración | https://cindyruano.github.io/quejas-ciudadanas/admin.html |
+| API (Render) | https://quejas-ciudadanas.onrender.com/api/health |
+
+- El frontend se publica en **GitHub Pages** desde la rama `gh-pages` (contenido de `/frontend`): `git subtree push --prefix frontend origin gh-pages`.
+- El backend se publica en **Render** (plan gratuito) con el Blueprint `render.yaml`. La credencial de Firebase se configura en Render como la variable secreta `FIREBASE_SERVICE_ACCOUNT_BASE64`.
+- El plan gratuito de Render suspende el servicio tras 15 min sin uso: la primera petición puede tardar ~50 s mientras despierta. Su disco es temporal, por lo que `/uploads` y `/capturas` se reinician con cada despliegue; la información permanente vive en Firestore.
+
 ## Estructura del proyecto
 
 ```
